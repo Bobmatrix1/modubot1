@@ -14,6 +14,10 @@ TOKEN_2 = os.environ.get("TOKEN_2")  # Welcome & reply bot
 WEBHOOK_URL_1 = os.environ.get("WEBHOOK_URL_1")  # /webhook1
 WEBHOOK_URL_2 = os.environ.get("WEBHOOK_URL_2")  # /webhook2
 
+# Safety checks
+assert TOKEN_1 and TOKEN_2, "Both bot tokens must be set!"
+assert WEBHOOK_URL_1 and WEBHOOK_URL_2, "Both webhook URLs must be set!"
+
 # === FastAPI App ===
 app = FastAPI()
 
@@ -55,24 +59,31 @@ async def reply(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif re.search(r'who are you', text):
         await update.message.reply_text(f"I'm ModuBot, your helpful group assistant, {user_name}!")
 
-# === Startup: Set webhooks and handlers ===
+# === Startup: Initialize bots and set webhooks ===
 @app.on_event("startup")
 async def startup_event():
     global bot1_app, bot2_app
 
+    # Build applications
     bot1_app = ApplicationBuilder().token(TOKEN_1).build()
     bot2_app = ApplicationBuilder().token(TOKEN_2).build()
 
+    # Add handlers
     bot1_app.add_handler(MessageHandler(filters.ALL, handle_link_deletion))
     bot2_app.add_handler(MessageHandler(filters.StatusUpdate.NEW_CHAT_MEMBERS, welcome_new_member))
     bot2_app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, reply))
 
+    # Initialize apps
+    await bot1_app.initialize()
+    await bot2_app.initialize()
+
+    # Set webhooks
     await bot1_app.bot.set_webhook(WEBHOOK_URL_1)
     await bot2_app.bot.set_webhook(WEBHOOK_URL_2)
 
-    print("[Startup] Webhooks set for both bots!")
+    print("[Startup] Bots initialized and webhooks set!")
 
-# === Webhook Routes ===
+# === Webhook Endpoints ===
 @app.post("/webhook1")
 async def webhook1(request: Request):
     if bot1_app is None:
@@ -91,7 +102,7 @@ async def webhook2(request: Request):
     await bot2_app.process_update(update)
     return {"status": "ok"}
 
-# === Run App with Port Binding ===
-if __name__ == "__modubot1__":
+# === Run App ===
+if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run("modubot1:app", host="0.0.0.0", port=port)

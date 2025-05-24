@@ -92,6 +92,6 @@ async def webhook2(request: Request):
     return {"status": "ok"}
 
 # === Run App with Port Binding ===
-if __name__ == "__main__":
+if __name__ == "__modubot1__":
     port = int(os.environ.get("PORT", 8000))
-    uvicorn.run("main:app", host="0.0.0.0", port=port)
+    uvicorn.run("modubot1:app", host="0.0.0.0", port=port)

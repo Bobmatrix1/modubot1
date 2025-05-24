@@ -8,12 +8,12 @@ from datetime import datetime
 import re
 
 # === Bot Tokens (set these in Render Environment Variables) ===
-TOKEN_1 = os.environ.get("7676608640:AAHvTxh5oDfWIz49au-iG_jexKZxnut805U")  # Link deletion bot
-TOKEN_2 = os.environ.get("7182575750:AAGg3K8OkwKekYCeHf5Bv2lPZClZ8CwQnq0")  # Welcome + Chat responder
+TOKEN_1 = os.environ.get("TOKEN_1")  # Link deletion bot
+TOKEN_2 = os.environ.get("TOKEN_2")  # Welcome + Chat responder
 
 # === Webhook URLs (set these in Render Environment Variables) ===
-WEBHOOK_URL_1 = os.environ.get("https://modubot1-2.onrender.com/webhook1")
-WEBHOOK_URL_2 = os.environ.get("https://modubot1-2.onrender.com/webhook2")
+WEBHOOK_URL_1 = os.environ.get("WEBHOOK_URL_1")
+WEBHOOK_URL_2 = os.environ.get("WEBHOOK_URL_2")
 
 app = FastAPI()
 

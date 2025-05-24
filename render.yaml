@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: modubot1
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn modubot1:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: TOKEN_1
+        value: 7676608640:AAHvTxh5oDfWIz49au-iG_jexKZxnut805U
+      - key: TOKEN_2
+        value: 7182575750:AAGg3K8OkwKekYCeHf5Bv2lPZClZ8CwQnq0
+      - key: WEBHOOK_URL_1
+        value: https://modu-bot-service.onrender.com/webhook1
+      - key: WEBHOOK_URL_2
+        value: https://modu-bot-service.onrender.com/webhook2
